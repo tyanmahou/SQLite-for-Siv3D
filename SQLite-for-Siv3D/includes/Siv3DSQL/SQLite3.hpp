@@ -1,6 +1,10 @@
 #pragma once
 #include <memory>
 #include <Siv3D/StringView.hpp>
+#include <Siv3D/Array.hpp>
+#include <Siv3D/HashTable.hpp>
+
+#include "DBValue.hpp"
 
 namespace s3dsql
 {
@@ -38,5 +42,39 @@ namespace s3dsql
 		/// <param name="sql"></param>
 		/// <returns></returns>
 		bool exec(s3d::StringView sql) const;
+
+		/// <summary>
+		/// レコードの取得
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <returns></returns>
+		[[nodiscard]] s3d::Array<DBRow> fetch(s3d::StringView sql) const;
+
+		/// <summary>
+		/// レコードの取得
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="values">プリペアドステートメントのパラメータ</param>
+		/// <returns></returns>
+		[[nodiscard]] s3d::Array<DBRow> fetch(s3d::StringView sql, const DBValueArray& values) const;
+
+		/// <summary>
+		/// レコードの取得
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <param name="values">プリペアドステートメントのパラメータ</param>
+		/// <returns></returns>
+		[[nodiscard]] s3d::Array<DBRow> fetch(s3d::StringView sql, const DBValueMap& values) const;
+
+		/// <summary>
+		/// DBが開かれているか
+		/// </summary>
+		/// <returns></returns>
+		[[nodiscard]] bool isOpen() const;
+
+		[[nodiscard]] explicit operator bool() const
+		{
+			return this->isOpen();
+		}
 	};
 }

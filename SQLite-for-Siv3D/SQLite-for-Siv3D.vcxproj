@@ -109,7 +109,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="src\DBValue\DBValue.cpp" />
     <ClCompile Include="src\SQLite3\SivSQLite3.cpp" />
+    <ClCompile Include="src\SQLite3\SQLite3Stmt.cpp" />
     <ClCompile Include="src\ThirdParty\sqlite3\sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
@@ -238,7 +240,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\Siv3DSQL.hpp" />
+    <ClInclude Include="includes\Siv3DSQL\DBValue.hpp" />
     <ClInclude Include="includes\Siv3DSQL\SQLite3.hpp" />
+    <ClInclude Include="src\SQLite3\SQLite3Stmt.hpp" />
+    <ClInclude Include="src\ThirdParty\sqlite3\sqlite3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
