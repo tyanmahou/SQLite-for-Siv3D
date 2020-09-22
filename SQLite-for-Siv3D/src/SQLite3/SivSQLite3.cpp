@@ -33,12 +33,11 @@ namespace s3dsql
         }
         s3d::int32 exec(s3d::StringView sql)
         {
-            char* errorMsg = nullptr;
-            if (auto result = sqlite3_exec(m_db, s3d::Unicode::Narrow(sql).c_str(), nullptr, nullptr, &errorMsg); result != SQLITE_OK) {
-                LOG_FAIL(U"Failed Exec SQL : {}"_fmt(Unicode::Widen(errorMsg)));
+            SQLite3Stmt stmt(m_db);
+            if (!stmt.prepare(sql)) {
                 return 0;
             }
-            return sqlite3_changes(m_db);
+            return stmt.exec();
         }
         s3d::int32 exec(s3d::StringView sql, const DBValueArray& values)
         {
