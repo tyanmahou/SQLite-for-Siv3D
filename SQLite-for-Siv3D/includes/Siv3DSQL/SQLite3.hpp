@@ -5,6 +5,7 @@
 #include <Siv3D/HashTable.hpp>
 
 #include "DBValue.hpp"
+#include "SQLError.hpp"
 
 namespace s3dsql
 {
@@ -13,6 +14,19 @@ namespace s3dsql
 	/// </summary>
 	class SQLite3
 	{
+	public:
+		class Transaction
+		{
+		private:
+			const SQLite3& m_db;
+			bool m_isCommit = false;
+		public:
+			Transaction(const SQLite3& db);
+			~Transaction();
+
+			void commit();
+		};
+	private:
 		class Impl;
 		std::shared_ptr<Impl> m_pImpl;
 	public:
@@ -92,5 +106,11 @@ namespace s3dsql
 		{
 			return this->isOpen();
 		}
+
+		/// <summary>
+		/// トランザクションをはる
+		/// </summary>
+		/// <returns></returns>
+		Transaction beginTransaction() const;
 	};
 }

@@ -1,4 +1,5 @@
 #include <Siv3DSQL/SQLite3.hpp>
+#include <Siv3DSQL/SQLError.hpp>
 #include "../ThirdParty/sqlite3/sqlite3.h"
 #include "SQLite3Stmt.hpp"
 #include <Siv3D.hpp>
@@ -142,5 +143,33 @@ namespace s3dsql
     bool SQLite3::isOpen() const
     {
         return m_pImpl->isOpen();
+    }
+
+    SQLite3::Transaction SQLite3::beginTransaction() const
+    {
+        return Transaction(*this);
+    }
+
+    SQLite3::Transaction::Transaction(const SQLite3& db) :
+        m_db(db)
+    {
+        m_db.exec(U"BEGIN");
+    }
+    SQLite3::Transaction::~Transaction()
+    {
+        if (!m_isCommit) {
+            try {
+                m_db.exec(U"ROLLBACK");
+            } catch (SQLError&) {
+
+            }
+        }
+    }
+    void SQLite3::Transaction::commit()
+    {
+        if (!m_isCommit) {
+            m_db.exec(U"COMMIT");
+            m_isCommit = true;
+        }
     }
 }

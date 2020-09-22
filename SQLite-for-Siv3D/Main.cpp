@@ -19,78 +19,54 @@ void Main()
 		StringView sql = U""
 			"CREATE TABLE IF NOT EXISTS users("
 			"  `user_id` INTEGER PRIMARY KEY,"
-			"  `name` TEXT,"
+			"  `name` TEXT NOT NULL,"
 			"  `age` INTEGER"
 			");"
 			;
 		db.exec(sql);
 	}
-	// 挿入
-	{
-		StringView sql = U""
-			"INSERT INTO users(user_id, name, age)"
-			"VALUES"
-			"  (0, 'taro', 10),"
-			"  (1, 'hanako', 15);";
-		db.exec(sql);
-	}
-	// 挿入
-	{
-		DBValueArray values;
-		values.emplace_back(4);
-		values.emplace_back(String(U"mahou"));
-		values.emplace_back(24);
 
+	try {
+		// トランザクション開始
+		auto transaction = db.beginTransaction();
+		// 挿入
+		{
+			StringView sql = U""
+				"INSERT INTO users(user_id, name, age)"
+				"VALUES"
+				"  (?, ?, ?)";
+			db.exec(sql, {0, U"taro", 10});
+		}
+		{
+			DBValueMap values;
+			values[U":userId"] = 1;
+			values[U":name"] = U"mahou";
+			values[U":age"] = 24;
 
-		StringView sql = U""
-			"INSERT INTO users(user_id, name, age)"
-			"VALUES"
-			"  (?, ?, ?);";
-		db.exec(sql, values);
-	}
-	{
-		DBValueMap values;
-		values[U":userId"] = 6;
-		values[U":name"] = U"mahou3";
-
-		StringView sql = U""
-			"INSERT INTO users(user_id, name, age)"
-			"VALUES"
-			"  (:userId, :name, :userId)";
-		db.exec(sql, values);
+			StringView sql = U""
+				"INSERT INTO users(user_id, name, age)"
+				"VALUES"
+				"  (:userId, :name, :age)";
+			db.exec(sql, values);
+		}
+		// コミット
+		transaction.commit();
+	} catch (SQLError& error) {
+		Print << error.what();
 	}
 	// 取得
-	for (auto&& row : db.fetch(U"SELECT * FROM users")) {
-		Print << row[U"user_id"].get<int32>() 
-			<< U" " << row[U"name"].get<String>()
-			<< U" " << row[U"age"].get<int32>()
-			;
-	}
-	// 取得(pareped statement)
-	{
-		DBValueArray values;
-		values.emplace_back(1);
-
-		for (auto&& row : db.fetch(U"SELECT * FROM users WHERE user_id = ?", values)) {
-			Print << row[U"user_id"].get<int32>()
-				<< U" " << row[U"name"].get<String>()
-				<< U" " << row[U"age"].get<int32>()
-				;
-		}
-	}
-	// 取得(pareped statement by name)
 	{
 		DBValueMap values;
-		values[U":id"] = 0;
-		values[U":age"] = 10;
+		values[U":userId"] = 0;
 
-		for (auto&& row : db.fetch(U"SELECT * FROM users WHERE user_id = :id AND age = :age", values)) {
+		for (auto&& row : db.fetch(U"SELECT * FROM users WHERE user_id = :userId", values)) {
 			Print << row[U"user_id"].get<int32>()
 				<< U" " << row[U"name"].get<String>()
 				<< U" " << row[U"age"].get<int32>()
 				;
 		}
 	}
+
 	while (System::Update())
 	{
 
