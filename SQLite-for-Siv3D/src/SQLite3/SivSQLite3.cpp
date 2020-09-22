@@ -31,14 +31,40 @@ namespace s3dsql
             }
             m_db = nullptr;
         }
-        bool exec(s3d::StringView sql)
+        s3d::int32 exec(s3d::StringView sql)
         {
             char* errorMsg = nullptr;
             if (auto result = sqlite3_exec(m_db, s3d::Unicode::Narrow(sql).c_str(), nullptr, nullptr, &errorMsg); result != SQLITE_OK) {
                 LOG_FAIL(U"Failed Exec SQL : {}"_fmt(Unicode::Widen(errorMsg)));
-                return false;
+                return 0;
             }
-            return true;
+            return sqlite3_changes(m_db);
+        }
+        s3d::int32 exec(s3d::StringView sql, const DBValueArray& values)
+        {
+            SQLite3Stmt stmt(m_db);
+            if (!stmt.prepare(sql)) {
+                return 0;
+            }
+
+            int32 index = 1; // bindは1スタート
+            for (const auto& value : values) {
+                stmt.bind(index, value);
+                ++index;
+            }
+            return stmt.exec();
+        }
+        bool exec(s3d::StringView sql, const DBValueMap& values)
+        {
+            SQLite3Stmt stmt(m_db);
+            if (!stmt.prepare(sql)) {
+                return 0;
+            }
+
+            for (const auto& [name, value] : values) {
+                stmt.bind(name, value);
+            }
+            return stmt.exec();
         }
         s3d::Array<DBRow> fetch(s3d::StringView sql) const
         {
@@ -100,9 +126,17 @@ namespace s3dsql
         return m_pImpl->release();
     }
 
-    bool SQLite3::exec(s3d::StringView sql) const
+    s3d::int32 SQLite3::exec(s3d::StringView sql) const
     {
         return m_pImpl->exec(sql);
+    }
+    s3d::int32 SQLite3::exec(s3d::StringView sql, const DBValueArray& values) const
+    {
+        return m_pImpl->exec(sql, values);
+    }
+    s3d::int32 SQLite3::exec(s3d::StringView sql, const DBValueMap& values) const
+    {
+        return m_pImpl->exec(sql, values);
     }
     s3d::Array<DBRow> SQLite3::fetch(s3d::StringView sql) const
     {

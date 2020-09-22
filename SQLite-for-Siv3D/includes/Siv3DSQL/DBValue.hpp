@@ -76,6 +76,7 @@ namespace s3dsql
         DBValue(s3d::int64 i);
         DBValue(double f);
         DBValue(const s3d::String& str);
+        DBValue(const s3d::String::value_type* str);
         DBValue(const s3d::ByteArray& blob);
 
         ~DBValue();

@@ -12,15 +12,17 @@ namespace s3dsql
     {
         sqlite3_stmt* m_stmt = nullptr;
         sqlite3*const m_db = nullptr;
+        const char* m_tail = nullptr;
     public:
         SQLite3Stmt(sqlite3*const db);
         ~SQLite3Stmt();
 
         bool prepare(s3d::StringView sql);
 
-        bool bind(s3d::int32 index, const DBValue& value);
-        bool bind(s3d::StringView name, const DBValue& value);
+        bool bind(s3d::int32 index, const DBValue& value) const;
+        bool bind(s3d::StringView name, const DBValue& value) const;
 
-        s3d::Array<DBRow> fetch();
+        s3d::int32 exec() const;
+        s3d::Array<DBRow> fetch() const;
     };
 }

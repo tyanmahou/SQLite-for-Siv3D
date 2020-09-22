@@ -41,6 +41,9 @@ namespace s3dsql
     {
         m_value.str = new s3d::String(str);
     }
+    DBValue::DBValue(const s3d::String::value_type* str):
+        DBValue(s3d::String(str))
+    {}
     DBValue::DBValue(const s3d::ByteArray& blob) :
         m_type(DBValueType::Blob)
     {

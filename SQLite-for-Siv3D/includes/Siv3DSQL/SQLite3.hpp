@@ -40,8 +40,24 @@ namespace s3dsql
 		/// SQLの実行
 		/// </summary>
 		/// <param name="sql"></param>
-		/// <returns></returns>
-		bool exec(s3d::StringView sql) const;
+		/// <returns>更新あった行数</returns>
+		s3d::int32 exec(s3d::StringView sql) const;
+
+		/// <summary>
+		/// SQLの実行
+		/// </summary>
+		/// <param name="sql">SQL</param>
+		/// <param name="values">プリペアドステートメントのパラメータ</param>
+		/// <returns>更新あった行数</returns>
+		s3d::int32 exec(s3d::StringView sql, const DBValueArray& values) const;
+
+		/// <summary>
+		/// SQLの実行
+		/// </summary>
+		/// <param name="sql">SQL</param>
+		/// <param name="values">プリペアドステートメントのパラメータ</param>
+		/// <returns>更新あった行数</returns>
+		s3d::int32 exec(s3d::StringView sql, const DBValueMap& values) const;
 
 		/// <summary>
 		/// レコードの取得
@@ -53,7 +69,7 @@ namespace s3dsql
 		/// <summary>
 		/// レコードの取得
 		/// </summary>
-		/// <param name="sql"></param>
+		/// <param name="sql">SQL</param>
 		/// <param name="values">プリペアドステートメントのパラメータ</param>
 		/// <returns></returns>
 		[[nodiscard]] s3d::Array<DBRow> fetch(s3d::StringView sql, const DBValueArray& values) const;
@@ -61,7 +77,7 @@ namespace s3dsql
 		/// <summary>
 		/// レコードの取得
 		/// </summary>
-		/// <param name="sql"></param>
+		/// <param name="sql">SQL</param>
 		/// <param name="values">プリペアドステートメントのパラメータ</param>
 		/// <returns></returns>
 		[[nodiscard]] s3d::Array<DBRow> fetch(s3d::StringView sql, const DBValueMap& values) const;

@@ -22,7 +22,8 @@ namespace s3dsql
         }
         return true;
     }
-    bool SQLite3Stmt::bind(s3d::int32 index, const DBValue& value)
+
+    bool SQLite3Stmt::bind(s3d::int32 index, const DBValue& value) const
     {
         int result = 0;
         switch (value.getType()) {
@@ -49,12 +50,17 @@ namespace s3dsql
         }
         return result != SQLITE_OK;
     }
-    bool SQLite3Stmt::bind(s3d::StringView name, const DBValue& value)
+    bool SQLite3Stmt::bind(s3d::StringView name, const DBValue& value) const
     {
         auto index = sqlite3_bind_parameter_index(m_stmt, s3d::Unicode::Narrow(name).c_str());
         return this->bind(index, value);
     }
-    s3d::Array<DBRow> SQLite3Stmt::fetch()
+    s3d::int32 SQLite3Stmt::exec() const
+    {
+        auto error = sqlite3_step(m_stmt);
+        return sqlite3_changes(m_db);
+    }
+    s3d::Array<DBRow> SQLite3Stmt::fetch() const
     {
         s3d::Array<DBRow> result;
         int error = 0;
