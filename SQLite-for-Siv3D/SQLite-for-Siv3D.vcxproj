@@ -240,6 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\Siv3DSQL.hpp" />
+    <ClInclude Include="includes\Siv3DSQL\SQLError.hpp" />
     <ClInclude Include="includes\Siv3DSQL\DBValue.hpp" />
     <ClInclude Include="includes\Siv3DSQL\SQLite3.hpp" />
     <ClInclude Include="src\SQLite3\SQLite3Stmt.hpp" />

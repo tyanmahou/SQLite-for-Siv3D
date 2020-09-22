@@ -34,17 +34,14 @@ namespace s3dsql
         s3d::int32 exec(s3d::StringView sql)
         {
             SQLite3Stmt stmt(m_db);
-            if (!stmt.prepare(sql)) {
-                return 0;
-            }
+            stmt.prepare(sql);
+
             return stmt.exec();
         }
         s3d::int32 exec(s3d::StringView sql, const DBValueArray& values)
         {
             SQLite3Stmt stmt(m_db);
-            if (!stmt.prepare(sql)) {
-                return 0;
-            }
+            stmt.prepare(sql);
 
             int32 index = 1; // bindは1スタート
             for (const auto& value : values) {
@@ -56,9 +53,7 @@ namespace s3dsql
         bool exec(s3d::StringView sql, const DBValueMap& values)
         {
             SQLite3Stmt stmt(m_db);
-            if (!stmt.prepare(sql)) {
-                return 0;
-            }
+            stmt.prepare(sql);
 
             for (const auto& [name, value] : values) {
                 stmt.bind(name, value);
@@ -68,17 +63,14 @@ namespace s3dsql
         s3d::Array<DBRow> fetch(s3d::StringView sql) const
         {
             SQLite3Stmt stmt(m_db);
-            if (!stmt.prepare(sql)) {
-                return s3d::Array<DBRow>();
-            }
+            stmt.prepare(sql);
+
             return stmt.fetch();
         }
         s3d::Array<DBRow> fetch(s3d::StringView sql, const DBValueArray& values) const
         {
             SQLite3Stmt stmt(m_db);
-            if (!stmt.prepare(sql)) {
-                return s3d::Array<DBRow>();
-            }
+            stmt.prepare(sql);
 
             int32 index = 1; // bindは1スタート
             for (const auto& value : values) {
@@ -90,9 +82,7 @@ namespace s3dsql
         s3d::Array<DBRow> fetch(s3d::StringView sql, const DBValueMap& values) const
         {
             SQLite3Stmt stmt(m_db);
-            if (!stmt.prepare(sql)) {
-                return s3d::Array<DBRow>();
-            }
+            stmt.prepare(sql);
 
             for (const auto& [name, value] : values) {
                 stmt.bind(name, value);

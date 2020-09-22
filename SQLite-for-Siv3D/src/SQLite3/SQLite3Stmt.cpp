@@ -1,5 +1,5 @@
 #include "SQLite3Stmt.hpp"
-
+#include <Siv3DSQL/SQLError.hpp>
 #include <Siv3D.hpp>
 
 namespace s3dsql
@@ -17,8 +17,7 @@ namespace s3dsql
     {
         auto result = sqlite3_prepare_v2(m_db, s3d::Unicode::Narrow(sql).c_str(), -1, &m_stmt, nullptr);
         if (result != SQLITE_OK || !m_stmt) {
-            LOG_FAIL(U"Failed Prepare Stmt : {}"_fmt(Unicode::Widen(sqlite3_errmsg(m_db))));
-            return false;
+            throw SQLError(U"Failed SQL : {}"_fmt(Unicode::Widen(sqlite3_errmsg(m_db))));
         }
         return true;
     }
@@ -57,7 +56,9 @@ namespace s3dsql
     }
     s3d::int32 SQLite3Stmt::exec() const
     {
-        auto error = sqlite3_step(m_stmt);
+        if (auto error = sqlite3_step(m_stmt); error != SQLITE_DONE) {
+            throw SQLError(U"Failed SQL : {}"_fmt(Unicode::Widen(sqlite3_errmsg(m_db))));
+        }
         return sqlite3_changes(m_db);
     }
     s3d::Array<DBRow> SQLite3Stmt::fetch() const
@@ -103,8 +104,7 @@ namespace s3dsql
             result.push_back(std::move(record));
         }
         if (error != SQLITE_DONE) {
-            LOG_FAIL(U"Failed Fetch SQL : {}"_fmt(Unicode::Widen(sqlite3_errmsg(m_db))));
-            return s3d::Array<DBRow>();
+            throw SQLError(U"Failed SQL : {}"_fmt(Unicode::Widen(sqlite3_errmsg(m_db))));
         }
         return result;
     }
