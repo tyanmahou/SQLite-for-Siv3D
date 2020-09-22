@@ -37,18 +37,6 @@ void Main()
 				"  (?, ?, ?)";
 			db.exec(sql, {0, U"taro", 10});
 		}
-		{
-			DBValueMap values;
-			values[U":userId"] = 1;
-			values[U":name"] = U"mahou";
-			values[U":age"] = 24;
-
-			StringView sql = U""
-				"INSERT INTO users(user_id, name, age)"
-				"VALUES"
-				"  (:userId, :name, :age)";
-			db.exec(sql, values);
-		}
 		// コミット
 		transaction.commit();
 	} catch (SQLError& error) {
@@ -69,6 +57,5 @@ void Main()
 
 	while (System::Update())
 	{
-
 	}
 }
