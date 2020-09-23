@@ -36,6 +36,7 @@ void Main()
                 "VALUES"
                 "  (?, ?, ?)";
             db.exec(sql, { 0, U"taro", 10 });
+            db.exec(sql, { 1, U"mahou", 20 });
         }
         // コミット
         transaction.commit();
@@ -44,15 +45,22 @@ void Main()
     }
     // 取得
     {
-        DBValueMap values;
-        values[U":userId"] = 0;
-
-        for (auto&& row : db.fetch(U"SELECT * FROM users WHERE user_id = :userId", values)) {
+        for (auto&& row : db.fetch(U"SELECT * FROM users")) {
             Print << row[U"user_id"].get<int32>()
                 << U" " << row[U"name"].get<String>()
                 << U" " << row[U"age"].get<int32>()
                 ;
         }
+
+        DBValueMap values;
+        values[U":userId"] = 0;
+
+        db.fetchOne(U"SELECT * FROM users WHERE user_id = :userId", values).then([](DBRow& row) {
+            Print << row[U"user_id"].get<int32>()
+                << U" " << row[U"name"].get<String>()
+                << U" " << row[U"age"].get<int32>()
+                ;
+        });
     }
 
     while (System::Update()) {

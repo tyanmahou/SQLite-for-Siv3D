@@ -24,5 +24,6 @@ namespace s3dsql
 
         s3d::int32 exec() const;
         s3d::Array<DBRow> fetch() const;
+        s3d::Optional<DBRow> fetchOne() const;
     };
 }

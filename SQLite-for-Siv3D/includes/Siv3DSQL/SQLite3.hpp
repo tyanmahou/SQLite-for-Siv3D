@@ -97,6 +97,29 @@ namespace s3dsql
 		[[nodiscard]] s3d::Array<DBRow> fetch(s3d::StringView sql, const DBValueMap& values) const;
 
 		/// <summary>
+		/// レコードを一つ取得
+		/// </summary>
+		/// <param name="sql"></param>
+		/// <returns></returns>
+		[[nodiscard]] s3d::Optional<DBRow> fetchOne(s3d::StringView sql) const;
+
+		/// <summary>
+		/// レコードを一つ取得
+		/// </summary>
+		/// <param name="sql">SQL</param>
+		/// <param name="values">プリペアドステートメントのパラメータ</param>
+		/// <returns></returns>
+		[[nodiscard]] s3d::Optional<DBRow> fetchOne(s3d::StringView sql, const DBValueArray& values) const;
+
+		/// <summary>
+		/// レコードを一つ取得
+		/// </summary>
+		/// <param name="sql">SQL</param>
+		/// <param name="values">プリペアドステートメントのパラメータ</param>
+		/// <returns></returns>
+		[[nodiscard]] s3d::Optional<DBRow> fetchOne(s3d::StringView sql, const DBValueMap& values) const;
+
+		/// <summary>
 		/// DBが開かれているか
 		/// </summary>
 		/// <returns></returns>

@@ -90,6 +90,35 @@ namespace s3dsql
             }
             return stmt.fetch();
         }
+        s3d::Optional<DBRow> fetchOne(s3d::StringView sql) const
+        {
+            SQLite3Stmt stmt(m_db);
+            stmt.prepare(sql);
+
+            return stmt.fetchOne();
+        }
+        s3d::Optional<DBRow> fetchOne(s3d::StringView sql, const DBValueArray& values) const
+        {
+            SQLite3Stmt stmt(m_db);
+            stmt.prepare(sql);
+
+            int32 index = 1; // bindは1スタート
+            for (const auto& value : values) {
+                stmt.bind(index, value);
+                ++index;
+            }
+            return stmt.fetchOne();
+        }
+        s3d::Optional<DBRow> fetchOne(s3d::StringView sql, const DBValueMap& values) const
+        {
+            SQLite3Stmt stmt(m_db);
+            stmt.prepare(sql);
+
+            for (const auto& [name, value] : values) {
+                stmt.bind(name, value);
+            }
+            return stmt.fetchOne();
+        }
         bool isOpen()const
         {
             return m_db != nullptr;
@@ -139,6 +168,18 @@ namespace s3dsql
     s3d::Array<DBRow> SQLite3::fetch(s3d::StringView sql, const DBValueMap& values) const
     {
         return m_pImpl->fetch(sql, values);
+    }
+    s3d::Optional<DBRow> SQLite3::fetchOne(s3d::StringView sql) const
+    {
+        return m_pImpl->fetchOne(sql);
+    }
+    s3d::Optional<DBRow> SQLite3::fetchOne(s3d::StringView sql, const DBValueArray& values) const
+    {
+        return m_pImpl->fetchOne(sql, values);
+    }
+    s3d::Optional<DBRow> SQLite3::fetchOne(s3d::StringView sql, const DBValueMap& values) const
+    {
+        return m_pImpl->fetchOne(sql, values);
     }
     bool SQLite3::isOpen() const
     {

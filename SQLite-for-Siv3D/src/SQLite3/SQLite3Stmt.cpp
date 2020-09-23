@@ -2,6 +2,48 @@
 #include <Siv3DSQL/SQLError.hpp>
 #include <Siv3D.hpp>
 
+namespace
+{
+    using namespace s3dsql;
+    DBRow GetRow(sqlite3_stmt* stmt, int columnCount)
+    {
+        DBRow record;
+        for (int columnIdx = 0; columnIdx < columnCount; ++columnIdx) {
+            auto type = sqlite3_column_type(stmt, columnIdx);
+            auto* nameRaw = sqlite3_column_name(stmt, columnIdx);
+            auto name = Unicode::Widen(reinterpret_cast<const char*>(nameRaw));
+
+            switch (type) {
+            case SQLITE_NULL:
+                record.emplace(name, nullptr);
+                break;
+            case SQLITE_INTEGER:
+                record.emplace(name, sqlite3_column_int64(stmt, columnIdx));
+                break;
+            case SQLITE_FLOAT:
+                record.emplace(name, sqlite3_column_double(stmt, columnIdx));
+                break;
+            case SQLITE_TEXT:
+            {
+                auto* value = sqlite3_column_text(stmt, columnIdx);
+                record.emplace(name, Unicode::Widen(reinterpret_cast<const char*>(value)));
+            }
+            break;
+            case SQLITE_BLOB:
+            {
+                auto* value = sqlite3_column_blob(stmt, columnIdx);
+                auto size = sqlite3_column_bytes(stmt, columnIdx);
+                record.emplace(name, ByteArray(value, size));
+            }
+            break;
+            default:
+                record.emplace(name, nullptr);
+                break;
+            }
+        }
+        return record;
+    }
+}
 namespace s3dsql
 {
     SQLite3Stmt::SQLite3Stmt(sqlite3* const db):
@@ -67,45 +109,23 @@ namespace s3dsql
         int error = 0;
         int columnCount = sqlite3_column_count(m_stmt);
         while (SQLITE_ROW == (error = sqlite3_step(m_stmt))) {
-            DBRow record;
-            for (int columnIdx = 0; columnIdx < columnCount; ++columnIdx) {
-                auto type = sqlite3_column_type(m_stmt, columnIdx);
-                auto* nameRaw = sqlite3_column_name(m_stmt, columnIdx);
-                auto name = Unicode::Widen(reinterpret_cast<const char*>(nameRaw));
-
-                switch (type) {
-                case SQLITE_NULL:
-                    record.emplace(name, nullptr);
-                    break;
-                case SQLITE_INTEGER:
-                    record.emplace(name, sqlite3_column_int64(m_stmt, columnIdx));
-                    break;
-                case SQLITE_FLOAT:
-                    record.emplace(name, sqlite3_column_double(m_stmt, columnIdx));
-                    break;
-                case SQLITE_TEXT:
-                {
-                    auto* value = sqlite3_column_text(m_stmt, columnIdx);
-                    record.emplace(name, Unicode::Widen(reinterpret_cast<const char*>(value)));
-                }
-                break;
-                case SQLITE_BLOB:
-                {
-                    auto* value = sqlite3_column_blob(m_stmt, columnIdx);
-                    auto size = sqlite3_column_bytes(m_stmt, columnIdx);
-                    record.emplace(name, ByteArray(value, size));
-                }
-                break;
-                default:
-                    record.emplace(name, nullptr);
-                    break;
-                }
-            }
-            result.push_back(std::move(record));
+            result.push_back(::GetRow(m_stmt, columnCount));
         }
         if (error != SQLITE_DONE) {
             throw SQLError(U"Failed SQL : {}"_fmt(Unicode::Widen(sqlite3_errmsg(m_db))));
         }
         return result;
+    }
+    s3d::Optional<DBRow> SQLite3Stmt::fetchOne() const
+    {
+        int error = 0;
+        int columnCount = sqlite3_column_count(m_stmt);
+        if (SQLITE_ROW == (error = sqlite3_step(m_stmt))) {
+            return ::GetRow(m_stmt, columnCount);
+        }
+        if (error != SQLITE_DONE) {
+            throw SQLError(U"Failed SQL : {}"_fmt(Unicode::Widen(sqlite3_errmsg(m_db))));
+        }
+        return s3d::none;
     }
 }
