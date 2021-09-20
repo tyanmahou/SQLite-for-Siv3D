@@ -391,7 +391,9 @@ AS_DEBUG/
 [Ee]ngine/
 
 ## include/
+
 ## lib/
+SQLite-for-Siv3D/lib/
 
 ## Application
 [Ww]ork
