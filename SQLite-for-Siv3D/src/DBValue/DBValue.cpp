@@ -44,10 +44,10 @@ namespace s3dsql
     DBValue::DBValue(const s3d::String::value_type* str):
         DBValue(s3d::String(str))
     {}
-    DBValue::DBValue(const s3d::ByteArray& blob) :
+    DBValue::DBValue(const s3d::Blob& blob) :
         m_type(DBValueType::Blob)
     {
-        m_value.blob = new s3d::ByteArray(blob);
+        m_value.blob = new s3d::Blob(blob);
     }
     DBValue::~DBValue()
     {
@@ -110,7 +110,7 @@ namespace s3dsql
             m_value.str = new (std::nothrow) s3d::String();
             break;
         case DBValueType::Blob:
-            m_value.blob = new (std::nothrow) s3d::ByteArray();
+            m_value.blob = new (std::nothrow) s3d::Blob();
             break;
         default:
             break;
@@ -221,7 +221,7 @@ namespace s3dsql
             return s3d::none;
         }
     }
-    s3d::Optional<s3d::ByteArray> DBValue::getOptByteArray() const
+    s3d::Optional<s3d::Blob> DBValue::getOptBlob() const
     {
         if (!this->isBlob()) {
             return s3d::none;
@@ -250,7 +250,7 @@ namespace s3dsql
             break;
         case DBValueType::Blob:
             if (this->m_value.blob == nullptr) {
-                this->m_value.blob = new s3d::ByteArray();
+                this->m_value.blob = new s3d::Blob();
             }
             *this->m_value.blob = *other.m_value.blob;
             break;

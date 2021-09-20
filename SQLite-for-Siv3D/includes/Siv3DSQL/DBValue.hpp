@@ -1,5 +1,5 @@
 #pragma once
-#include <Siv3D/ByteArray.hpp>
+#include <Siv3D/Blob.hpp>
 #include <Siv3D/String.hpp>
 #include <Siv3D/HashTable.hpp>
 #include <Siv3D/Parse.hpp>
@@ -31,7 +31,7 @@ namespace s3dsql
             s3d::int64 i;
             double f;
             s3d::String* str;
-            s3d::ByteArray* blob;
+            s3d::Blob* blob;
         }m_value;
 
         void reset(DBValueType type);
@@ -64,7 +64,7 @@ namespace s3dsql
 
         s3d::Optional<bool> getOptBool() const;
 
-        s3d::Optional<s3d::ByteArray> getOptByteArray() const;
+        s3d::Optional<s3d::Blob> getOptBlob() const;
 
     public:
         DBValue();
@@ -77,7 +77,7 @@ namespace s3dsql
         DBValue(double f);
         DBValue(const s3d::String& str);
         DBValue(const s3d::String::value_type* str);
-        DBValue(const s3d::ByteArray& blob);
+        DBValue(const s3d::Blob& blob);
 
         ~DBValue();
 
@@ -161,8 +161,8 @@ namespace s3dsql
     }
 
     template <>
-    [[nodiscard]] inline s3d::Optional<s3d::ByteArray> DBValue::getOpt<s3d::ByteArray>() const
+    [[nodiscard]] inline s3d::Optional<s3d::Blob> DBValue::getOpt<s3d::Blob>() const
     {
-        return getOptByteArray();
+        return getOptBlob();
     }
 }

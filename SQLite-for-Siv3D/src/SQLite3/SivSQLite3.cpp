@@ -3,6 +3,7 @@
 #include "../ThirdParty/sqlite3/sqlite3.h"
 #include "SQLite3Stmt.hpp"
 #include <Siv3D.hpp>
+#include <Siv3D/EngineLog.hpp>
 
 namespace s3dsql
 {
@@ -18,7 +19,7 @@ namespace s3dsql
         }
         bool open(s3d::FilePathView path)
         {
-            if (auto result = sqlite3_open16(s3d::Unicode::ToWString(path).c_str(), &m_db); result != SQLITE_OK) {
+            if (auto result = sqlite3_open16(s3d::Unicode::ToWstring(path).c_str(), &m_db); result != SQLITE_OK) {
                 LOG_FAIL(U"Failed Open: {}"_fmt(path));
                 return false;
             }

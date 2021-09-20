@@ -33,7 +33,7 @@ namespace
             {
                 auto* value = sqlite3_column_blob(stmt, columnIdx);
                 auto size = sqlite3_column_bytes(stmt, columnIdx);
-                record.emplace(name, ByteArray(value, size));
+                record.emplace(name, Blob(value, size));
             }
             break;
             default:
@@ -82,7 +82,7 @@ namespace s3dsql
             break;
         case DBValueType::Blob:
         {
-            auto&& blob = value.get<s3d::ByteArray>();
+            auto&& blob = value.get<s3d::Blob>();
             result = sqlite3_bind_blob(m_stmt, index, blob.data(), static_cast<int>(blob.size()), SQLITE_TRANSIENT);
         }
             break;
