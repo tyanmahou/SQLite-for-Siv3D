@@ -1,25 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30503.244
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite-for-Siv3D", "SQLite-for-Siv3D\SQLite-for-Siv3D.vcxproj", "{204E9CEA-F1B4-40B7-8BA2-98CC958C3E15}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite-for-Siv3D", "SQLite-for-Siv3D\SQLite-for-Siv3D.vcxproj", "{4E98D652-A318-4880-A960-51F77F321D77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Release|x64 = Release|x64
+		Test|x64 = Test|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{204E9CEA-F1B4-40B7-8BA2-98CC958C3E15}.Debug|x64.ActiveCfg = Debug|x64
-		{204E9CEA-F1B4-40B7-8BA2-98CC958C3E15}.Debug|x64.Build.0 = Debug|x64
-		{204E9CEA-F1B4-40B7-8BA2-98CC958C3E15}.Release|x64.ActiveCfg = Release|x64
-		{204E9CEA-F1B4-40B7-8BA2-98CC958C3E15}.Release|x64.Build.0 = Release|x64
+		{4E98D652-A318-4880-A960-51F77F321D77}.Debug|x64.ActiveCfg = Debug|x64
+		{4E98D652-A318-4880-A960-51F77F321D77}.Debug|x64.Build.0 = Debug|x64
+		{4E98D652-A318-4880-A960-51F77F321D77}.Release|x64.ActiveCfg = Release|x64
+		{4E98D652-A318-4880-A960-51F77F321D77}.Release|x64.Build.0 = Release|x64
+		{4E98D652-A318-4880-A960-51F77F321D77}.Test|x64.ActiveCfg = Test|x64
+		{4E98D652-A318-4880-A960-51F77F321D77}.Test|x64.Build.0 = Test|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A3454C55-93E3-4275-A501-EA21872556E7}
+		SolutionGuid = {47016F5F-3633-4FD2-8B87-0D2C8F428B7C}
 	EndGlobalSection
 EndGlobal
