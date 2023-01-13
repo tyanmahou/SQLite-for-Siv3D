@@ -1,4 +1,5 @@
-#include "SQLite3Stmt.hpp"
+﻿#include "SQLite3Stmt.hpp"
+#include "../ThirdParty/sqlite3/sqlite3.h"
 #include <Siv3DSQL/SQLError.hpp>
 #include <Siv3D.hpp>
 

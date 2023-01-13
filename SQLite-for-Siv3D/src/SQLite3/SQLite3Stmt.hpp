@@ -1,11 +1,13 @@
-#pragma once
+﻿#pragma once
 #include <Siv3D/StringView.hpp>
 #include <Siv3D/Array.hpp>
 #include <Siv3D/HashTable.hpp>
 
 #include <Siv3DSQL/DBValue.hpp>
 
-#include "../ThirdParty/sqlite3/sqlite3.h"
+struct sqlite3_stmt;
+struct sqlite3;
+
 namespace s3dsql
 {
     class SQLite3Stmt
