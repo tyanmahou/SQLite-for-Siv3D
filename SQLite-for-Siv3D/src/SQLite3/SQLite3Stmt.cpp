@@ -11,8 +11,8 @@ namespace
         DBRow record;
         for (int columnIdx = 0; columnIdx < columnCount; ++columnIdx) {
             auto type = sqlite3_column_type(stmt, columnIdx);
-            auto* nameRaw = sqlite3_column_name(stmt, columnIdx);
-            auto name = Unicode::Widen(reinterpret_cast<const char*>(nameRaw));
+            const auto* nameRaw = sqlite3_column_name(stmt, columnIdx);
+            auto name = Unicode::Widen(nameRaw);
 
             switch (type) {
             case SQLITE_NULL:
