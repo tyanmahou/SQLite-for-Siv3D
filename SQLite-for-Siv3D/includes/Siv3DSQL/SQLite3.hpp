@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <memory>
 #include <Siv3D/StringView.hpp>
 #include <Siv3D/Array.hpp>
@@ -26,9 +26,6 @@ namespace s3dsql
 
 			void commit();
 		};
-	private:
-		class Impl;
-		std::shared_ptr<Impl> m_pImpl;
 	public:
 		SQLite3();
 
@@ -135,5 +132,9 @@ namespace s3dsql
 		/// </summary>
 		/// <returns></returns>
 		Transaction beginTransaction() const;
+
+	private:
+		class Impl;
+		std::shared_ptr<Impl> m_pImpl;
 	};
 }

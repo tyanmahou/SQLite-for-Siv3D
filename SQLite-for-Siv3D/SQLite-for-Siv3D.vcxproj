@@ -167,7 +167,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Test|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\DBValue\DBValue.cpp" />
     <ClCompile Include="src\SQLite3\SivSQLite3.cpp" />
     <ClCompile Include="src\SQLite3\SQLite3Stmt.cpp" />
