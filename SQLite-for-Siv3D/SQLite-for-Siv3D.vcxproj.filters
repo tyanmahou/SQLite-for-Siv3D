@@ -791,6 +791,18 @@
     <ClInclude Include="src\SQLite3\SQLite3Stmt.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="includes\Siv3DSQL\DBValue.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\Siv3DSQL\SQLError.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\Siv3DSQL\SQLite3.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\Siv3DSQL.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\ThirdParty\sqlite3\sqlite3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
